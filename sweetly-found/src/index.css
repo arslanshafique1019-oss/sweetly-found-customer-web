@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+  }
+  body {
+    @apply bg-blush-100 text-maroon-900 font-sans antialiased;
+    overflow-x: hidden;
+    width: 100%;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@layer utilities {
+  .container-page {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 md:px-10;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-maroon-700 text-white font-medium px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base hover:bg-maroon-800 transition-colors duration-200 shadow-sm;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/70 text-white font-medium px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base hover:bg-white/10 transition-colors duration-200;
+  }
+  .btn-outline-maroon {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-maroon-700 text-maroon-700 font-medium px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base hover:bg-maroon-700 hover:text-white transition-colors duration-200;
+  }
+}
