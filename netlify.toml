@@ -1,0 +1,8 @@
+[build]
+  command = "cd sweetly-found && npm install && npm run build"
+  publish = "sweetly-found/dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

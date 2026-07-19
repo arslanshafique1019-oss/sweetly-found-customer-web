@@ -9,6 +9,7 @@ import AddCardForm from "../components/AddCardForm";
 import { orderHistory } from "../data/products";
 import { useAccount } from "../context/AccountContext";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 const TABS = [
   { key: "profile", label: "Profile", icon: User },
@@ -26,6 +27,25 @@ const statusStyles = {
 
 export default function AccountSettings() {
   const [tab, setTab] = useState("profile");
+  const { currentUser } = useAuth();
+
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <div className="container-page flex-1 py-10 sm:py-16">
+          <div className="mx-auto max-w-2xl rounded-[28px] border border-maroon-100 bg-white p-6 text-center shadow-card sm:p-10">
+            <h1 className="font-display text-3xl font-semibold text-maroon-900">Please login to view your account</h1>
+            <p className="mt-3 text-sm leading-7 text-maroon-900/70">
+              Sign in or create an account to manage your profile, orders, delivery details, and favorite bakers.
+            </p>
+            <Link to="/auth" className="btn-primary mt-6">Go to login</Link>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -98,6 +118,7 @@ export default function AccountSettings() {
 function ProfileTab() {
   const [saved, setSaved] = useState(false);
   const { notify } = useCart();
+  const { currentUser } = useAuth();
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -122,16 +143,16 @@ function ProfileTab() {
           </button>
         </div>
         <div>
-          <p className="font-medium">Muhammad Arslan</p>
-          <p className="text-xs text-maroon-900/50 mt-0.5">Member since 2025</p>
+          <p className="font-medium">{currentUser.name}</p>
+          <p className="text-xs text-maroon-900/50 mt-0.5">Member since {new Date(currentUser.createdAt).toLocaleDateString("en-US", { month: "short", year: "numeric" })}</p>
         </div>
       </div>
 
       <form onSubmit={handleSave} className="grid sm:grid-cols-2 gap-5 max-w-xl">
-        <Field label="Full Name" defaultValue="Muhammad Arslan" />
-        <Field label="Email" type="email" defaultValue="arslan@example.com" />
-        <Field label="Phone" type="tel" defaultValue="+1 (555) 012-3456" />
-        <Field label="Date of Birth" type="date" defaultValue="1998-04-12" />
+        <Field label="Full Name" defaultValue={currentUser.name} />
+        <Field label="Email" type="email" defaultValue={currentUser.email} />
+        <Field label="Phone" type="tel" defaultValue={currentUser.phone || ""} />
+        <Field label="Date of Birth" type="date" defaultValue={currentUser.birthday || ""} />
         <div className="sm:col-span-2 flex items-center gap-3">
           <button type="submit" className="btn-primary !px-8">Save Changes</button>
           {saved && <span className="text-sm text-green-700 font-medium">✓ Saved</span>}

@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { NavLink, useLocation } from "react-router-dom";
-import { Search, ShoppingBag, User, MoreVertical, X } from "lucide-react";
+import { Search, ShoppingBag, User, MoreVertical, X, LogOut } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 const navLinkClass = ({ isActive }) =>
   `text-sm font-medium transition-colors ${
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
 
 export default function Navbar({ showSearch = false, transparent = false, searchValue = "", onSearchChange }) {
   const { itemCount } = useCart();
+  const { currentUser, logout } = useAuth();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const drawerRef = useRef(null);
@@ -147,10 +149,26 @@ export default function Navbar({ showSearch = false, transparent = false, search
             <User className="w-5 h-5" />
           </NavLink>
 
-          <div className="hidden md:block">
-            <NavLink to="/account" className="btn-primary !py-2.5 !px-5 text-sm">
-              Login/Signup
-            </NavLink>
+          <div className="hidden md:flex items-center gap-2">
+            {currentUser ? (
+              <>
+                <NavLink to="/account" className="text-sm font-semibold text-maroon-700">
+                  {currentUser.name.split(" ")[0]}
+                </NavLink>
+                <button
+                  type="button"
+                  onClick={() => logout()}
+                  className="flex items-center gap-2 rounded-full border border-maroon-200 px-3 py-2 text-sm font-medium text-maroon-700 hover:bg-blush-100"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </button>
+              </>
+            ) : (
+              <NavLink to="/auth" className="btn-primary !py-2.5 !px-5 text-sm">
+                Login/Signup
+              </NavLink>
+            )}
           </div>
         </div>
       </div>
@@ -250,6 +268,24 @@ function MobileDrawer({ open, onClose, drawerRef, itemCount }) {
                 Account
               </NavLink>
             </li>
+            <li>
+              {currentUser ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    logout();
+                    onClose();
+                  }}
+                  className={drawerLinkClass({ isActive: false })}
+                >
+                  Logout
+                </button>
+              ) : (
+                <NavLink to="/auth" className={drawerLinkClass} onClick={onClose}>
+                  Login / Sign up
+                </NavLink>
+              )}
+            </li>
           </ul>
         </nav>
 
@@ -261,9 +297,15 @@ function MobileDrawer({ open, onClose, drawerRef, itemCount }) {
           <p className="text-sm text-maroon-900/70 leading-snug mb-4">
             Passionate about baking? Share your craft with our community.
           </p>
-          <NavLink to="/account" className="btn-primary w-full">
-            Login / Sign up
-          </NavLink>
+          {currentUser ? (
+            <button type="button" onClick={() => logout()} className="btn-primary w-full">
+              Logout
+            </button>
+          ) : (
+            <NavLink to="/auth" className="btn-primary w-full" onClick={onClose}>
+              Login / Sign up
+            </NavLink>
+          )}
         </div>
       </aside>
     </div>
