@@ -205,6 +205,8 @@ export default function Navbar({ showSearch = false, transparent = false, search
           onClose={() => setDrawerOpen(false)}
           drawerRef={drawerRef}
           itemCount={itemCount}
+          currentUser={currentUser}
+          logout={logout}
         />,
         document.body
       )}
@@ -214,7 +216,7 @@ export default function Navbar({ showSearch = false, transparent = false, search
   );
 }
 
-function MobileDrawer({ open, onClose, drawerRef, itemCount }) {
+function MobileDrawer({ open, onClose, drawerRef, itemCount, currentUser, logout }) {
   return (
     <div className="md:hidden">
       {/* Backdrop */}
