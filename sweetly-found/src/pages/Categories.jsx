@@ -41,7 +41,7 @@ export default function Categories() {
     const params = new URLSearchParams(location.search);
     const q = params.get("q") || "";
     if (q !== searchTerm) setSearchTerm(q);
-  }, [location.search]);
+  }, [location.search, searchTerm]);
 
   const filterProducts = (items) => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
@@ -69,7 +69,6 @@ export default function Categories() {
 
   const filteredProducts = filterProducts(artisanalCakes);
   const totalResults = filteredProducts.length;
-  const totalPages = Math.max(1, Math.ceil(totalResults / pageSize));
 
   return (
     <div className="min-h-screen flex flex-col">

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { User, Package, MapPin, CreditCard, Bell, Camera, Plus, Trash2 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -27,7 +27,8 @@ const statusStyles = {
 
 export default function AccountSettings() {
   const [tab, setTab] = useState("profile");
-  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  const { currentUser, logout } = useAuth();
 
   if (!currentUser) {
     return (
@@ -52,12 +53,26 @@ export default function AccountSettings() {
       <Navbar />
 
       <div className="container-page py-6 sm:py-8 md:py-10 flex-1">
-        <p className="text-xs text-maroon-900/50 mb-2">
-          <Link to="/" className="hover:text-maroon-700">Home</Link>
-          <span className="mx-1.5">/</span>
-          <span className="text-maroon-700">Account Settings</span>
-        </p>
-        <h1 className="text-2xl xs:text-3xl md:text-4xl font-semibold mb-5 sm:mb-8">Account Settings</h1>
+        <div className="flex flex-wrap items-start justify-between gap-3 mb-5 sm:mb-8">
+          <div>
+            <p className="text-xs text-maroon-900/50 mb-2">
+              <Link to="/" className="hover:text-maroon-700">Home</Link>
+              <span className="mx-1.5">/</span>
+              <span className="text-maroon-700">Account Settings</span>
+            </p>
+            <h1 className="text-2xl xs:text-3xl md:text-4xl font-semibold">Account Settings</h1>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              logout();
+              navigate("/auth");
+            }}
+            className="btn-outline-maroon !px-4 !py-2 text-sm"
+          >
+            Logout
+          </button>
+        </div>
 
         <div className="grid md:grid-cols-[220px_1fr] gap-5 md:gap-10">
           <nav className="hidden md:block bg-white rounded-xl2 shadow-card p-2.5 sm:p-3 h-fit md:sticky md:top-24">

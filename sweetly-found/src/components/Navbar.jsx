@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { NavLink, useLocation } from "react-router-dom";
-import { Search, ShoppingBag, User, MoreVertical, X, LogOut } from "lucide-react";
+import { Search, ShoppingBag, User, MoreVertical, X } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -144,35 +144,13 @@ export default function Navbar({ showSearch = false, transparent = false, search
           <NavLink
             to="/account"
             aria-label="Account settings"
-            className="hidden sm:flex p-2 text-maroon-800 hover:text-maroon-700 transition-colors"
+            className="flex p-2 text-maroon-800 hover:text-maroon-700 transition-colors"
           >
-            {currentUser ? (
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-maroon-700 text-sm font-semibold text-white">
-                {currentUser.name?.charAt(0)?.toUpperCase() || "U"}
-              </span>
-            ) : (
             <User className="w-5 h-5" />
-            )}
           </NavLink>
 
           <div className="hidden md:flex items-center gap-2">
-            {currentUser ? (
-              <NavLink to="/account" className="flex items-center gap-2 rounded-full border border-maroon-200 bg-white px-3 py-2 text-sm font-semibold text-maroon-700 shadow-sm hover:bg-blush-100">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-maroon-700 text-sm font-semibold text-white">
-                  {currentUser.name?.charAt(0)?.toUpperCase() || "U"}
-                </span>
-                <span className="hidden lg:inline">{currentUser.name.split(" ")[0]}</span>
-                </NavLink>
-                <button
-                  type="button"
-                  onClick={() => logout()}
-                  className="flex items-center gap-2 rounded-full border border-maroon-200 px-3 py-2 text-sm font-medium text-maroon-700 hover:bg-blush-100"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </button>
-              </>
-            ) : (
+            {!currentUser && (
               <NavLink to="/auth" className="btn-primary !py-2.5 !px-5 text-sm">
                 Login/Signup
               </NavLink>
@@ -214,7 +192,6 @@ export default function Navbar({ showSearch = false, transparent = false, search
           drawerRef={drawerRef}
           itemCount={itemCount}
           currentUser={currentUser}
-          logout={logout}
         />,
         document.body
       )}
@@ -224,7 +201,7 @@ export default function Navbar({ showSearch = false, transparent = false, search
   );
 }
 
-function MobileDrawer({ open, onClose, drawerRef, itemCount, currentUser, logout }) {
+function MobileDrawer({ open, onClose, drawerRef, itemCount, currentUser }) {
   return (
     <div className="md:hidden">
       {/* Backdrop */}
@@ -280,16 +257,9 @@ function MobileDrawer({ open, onClose, drawerRef, itemCount, currentUser, logout
             </li>
             <li>
               {currentUser ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    logout();
-                    onClose();
-                  }}
-                  className={drawerLinkClass({ isActive: false })}
-                >
-                  Logout
-                </button>
+                <NavLink to="/account" className={drawerLinkClass} onClick={onClose}>
+                  View account
+                </NavLink>
               ) : (
                 <NavLink to="/auth" className={drawerLinkClass} onClick={onClose}>
                   Login / Sign up
@@ -308,9 +278,9 @@ function MobileDrawer({ open, onClose, drawerRef, itemCount, currentUser, logout
             Passionate about baking? Share your craft with our community.
           </p>
           {currentUser ? (
-            <button type="button" onClick={() => logout()} className="btn-primary w-full">
-              Logout
-            </button>
+            <NavLink to="/account" className="btn-primary w-full" onClick={onClose}>
+              Go to account
+            </NavLink>
           ) : (
             <NavLink to="/auth" className="btn-primary w-full" onClick={onClose}>
               Login / Sign up
