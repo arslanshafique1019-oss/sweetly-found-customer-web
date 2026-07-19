@@ -146,14 +146,22 @@ export default function Navbar({ showSearch = false, transparent = false, search
             aria-label="Account settings"
             className="hidden sm:flex p-2 text-maroon-800 hover:text-maroon-700 transition-colors"
           >
+            {currentUser ? (
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-maroon-700 text-sm font-semibold text-white">
+                {currentUser.name?.charAt(0)?.toUpperCase() || "U"}
+              </span>
+            ) : (
             <User className="w-5 h-5" />
+            )}
           </NavLink>
 
           <div className="hidden md:flex items-center gap-2">
             {currentUser ? (
-              <>
-                <NavLink to="/account" className="text-sm font-semibold text-maroon-700">
-                  {currentUser.name.split(" ")[0]}
+              <NavLink to="/account" className="flex items-center gap-2 rounded-full border border-maroon-200 bg-white px-3 py-2 text-sm font-semibold text-maroon-700 shadow-sm hover:bg-blush-100">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-maroon-700 text-sm font-semibold text-white">
+                  {currentUser.name?.charAt(0)?.toUpperCase() || "U"}
+                </span>
+                <span className="hidden lg:inline">{currentUser.name.split(" ")[0]}</span>
                 </NavLink>
                 <button
                   type="button"
