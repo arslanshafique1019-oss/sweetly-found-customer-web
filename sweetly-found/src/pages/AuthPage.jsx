@@ -41,7 +41,7 @@ export default function AuthPage() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
     setSuccess("");
@@ -52,7 +52,7 @@ export default function AuthPage() {
         return;
       }
       try {
-        signup({
+        await signup({
           name: form.name,
           email: form.email,
           password: form.password,
@@ -62,7 +62,7 @@ export default function AuthPage() {
           about: form.about,
           newsletter: form.newsletter,
         });
-        setSuccess("Welcome aboard! Your account is ready.");
+        setSuccess("Welcome aboard! Check your email to confirm your account.");
         notify("Account created successfully");
         navigate("/account");
       } catch (err) {
@@ -77,7 +77,7 @@ export default function AuthPage() {
     }
 
     try {
-      login(form.email, form.password);
+      await login(form.email, form.password);
       setSuccess("You’re signed in.");
       notify("Welcome back to Sweetly Found");
       navigate("/account");
@@ -86,9 +86,9 @@ export default function AuthPage() {
     }
   };
 
-  const handleGoogle = () => {
+  const handleGoogle = async () => {
     try {
-      loginWithGoogle("Google User");
+      await loginWithGoogle();
       notify("Signed in with Google");
       navigate("/account");
     } catch (err) {
